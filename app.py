@@ -76,7 +76,6 @@ def get_quality_report(df):
 
     return pd.DataFrame(report)
 
-
 def clean_dates(df):
     date_columns = []
 
@@ -128,6 +127,8 @@ def validate_emails(df):
 
 
 def fill_missing_values(df):
+    df = df.copy()
+
     for column in df.columns:
         if pd.api.types.is_numeric_dtype(df[column]):
             median = df[column].median()
@@ -135,11 +136,13 @@ def fill_missing_values(df):
             if pd.notna(median):
                 df[column] = df[column].fillna(median)
 
-        elif pd.api.types.is_object_dtype(df[column]):
+        elif (
+            pd.api.types.is_object_dtype(df[column])
+            or pd.api.types.is_string_dtype(df[column])
+        ):
             df[column] = df[column].fillna("Unknown")
 
     return df
-
 
 def clean_data(file_path):
     original = load_file(file_path)
@@ -256,12 +259,16 @@ def clean_data(file_path):
         ),
         "missing_values_after": int(
             df.isna().sum().sum()
-        )
+        ),
+        "unresolved_missing_columns": {
+            column: int(count)
+            for column, count in df.isna().sum().items()
+            if count > 0
+        }
     }
 
     with open(output_json, "w", encoding="utf-8") as file:
         json.dump(summary, file, indent=4)
-
     print("\n========== CLEANING COMPLETED ==========")
     print("Original rows:", original_rows)
     print("Cleaned rows:", len(df))
