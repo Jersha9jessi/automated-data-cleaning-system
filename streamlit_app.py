@@ -51,17 +51,17 @@ with st.form("top_ai_search", clear_on_submit=True):
             "Ask AI",
             placeholder="✨ Ask anything about your cleaned data...",
             label_visibility="collapsed",
-            disabled=not ai_ready
+            disabled=False
         )
     with col2:
         submitted = st.form_submit_button(
             "Ask AI ✨",
             use_container_width=True,
-            disabled=not ai_ready
+            disabled=False
         )
 
 if not ai_ready:
-    st.caption("📂 Upload and clean a CSV or Excel file to activate your AI Assistant.")
+    st.caption("💡 Ask about this app or data formats anytime. Upload a file for dataset analysis.")
 
 if submitted and question.strip():
     history = st.session_state["ai_chat_history"]
@@ -71,7 +71,7 @@ if submitted and question.strip():
             answer = ask_gemini(
                 question,
                 history[-6:],
-                st.session_state["ai_data_summary"],
+                st.session_state.get("ai_data_summary", ""),
                 api_key
             )
         history.append({"role": "user", "content": question})

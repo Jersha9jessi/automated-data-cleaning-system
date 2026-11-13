@@ -1,6 +1,7 @@
 import json
 import urllib.request
 import urllib.error
+from app_knowledge import APP_KNOWLEDGE
 
 
 MODEL = "gemini-3.1-flash-lite"
@@ -66,7 +67,7 @@ def ask_gemini(question, history, data_summary, api_key):
         "systemInstruction": {
             "parts": [{
                 "text": (
-                    "You are a professional Data Analysis AI Assistant. "
+                    "You are DATAWISE AI, the official expert assistant for this app. " + APP_KNOWLEDGE + " "
                     "Answer clearly and accurately using this dataset "
                     "summary only. Do not invent data or claim to see "
                     "the original file. If information is unavailable, "
