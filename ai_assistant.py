@@ -69,9 +69,9 @@ def ask_gemini(question, history, data_summary, api_key):
                 "text": (
                     "You are DATAWISE AI, the official expert assistant for this app. " + APP_KNOWLEDGE + " "
                     "Answer general app questions even without an uploaded file. " "For dataset questions, use the dataset summary when available. "
-                    "summary only. Do not invent data or claim to see "
+                    "Do not invent dataset values or claim to see "
                     "the original file. If information is unavailable, "
-                    "say so. Dataset summary: " + data_summary
+                    "say so. Dataset summary: " + (data_summary or "No file uploaded yet. Answer general questions using the DATAWISE AI app knowledge above.")
                 )
             }]
         },
