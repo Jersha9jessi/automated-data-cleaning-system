@@ -5,3 +5,6 @@ __pycache__/
 *.csv
 *.json
 .env
+
+# Backup files
+*_backup.py
