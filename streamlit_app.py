@@ -5,6 +5,7 @@ import tempfile
 from pathlib import Path
 
 from app import clean_data, clean_column_names, get_data_quality_score, generate_pdf_report
+from ai_assistant import build_data_summary, ask_gemini
 
 st.set_page_config(
     page_title="Automated Data Cleaning",
@@ -206,6 +207,7 @@ if uploaded_file is not None:
 
                     with open(output_json, encoding="utf-8") as file:
                         report = json.load(file)
+                    st.session_state["ai_data_summary"] = build_data_summary(cleaned_df, report)
 
                     st.success("Data cleaning completed successfully!")
 
@@ -377,3 +379,49 @@ if pdf_file is not None:
 
     except Exception as error:
         st.error(f"PDF validation failed: {error}")
+
+
+# ================= AI DATA ASSISTANT =================
+
+if "ai_data_summary" in st.session_state:
+    st.divider()
+    st.header("🤖 AI Data Assistant")
+    st.caption("Ask questions about your cleaned dataset using Gemini AI.")
+
+    chat_history = st.session_state.setdefault("ai_chat_history", [])
+
+    for message in chat_history:
+        with st.chat_message("assistant" if message["role"] == "model" else "user"):
+            st.markdown(message["content"])
+
+    question = st.chat_input("Ask something about your cleaned data...")
+
+    if question:
+        st.session_state["ai_chat_history"].append({
+            "role": "user",
+            "content": question
+        })
+
+        with st.chat_message("user"):
+            st.markdown(question)
+
+        try:
+            api_key = st.secrets["GEMINI_API_KEY"]
+
+            with st.chat_message("assistant"):
+                with st.spinner("AI is analyzing your question..."):
+                    answer = ask_gemini(
+                        question,
+                        chat_history[:-1],
+                        st.session_state["ai_data_summary"],
+                        api_key
+                    )
+                st.markdown(answer)
+
+            st.session_state["ai_chat_history"].append({
+                "role": "model",
+                "content": answer
+            })
+
+        except Exception as error:
+            st.error(f"AI Assistant error: {error}")

@@ -8,3 +8,8 @@ __pycache__/
 
 # Backup files
 *_backup.py
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+*_backup*.py
