@@ -42,7 +42,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 ai_ready = "ai_data_summary" in st.session_state
-st.session_state.setdefault("ai_chat_history", [])
+st.session_state.setdefault("ai_chat_history_v2", [])
 
 with st.form("top_ai_search", clear_on_submit=True):
     col1, col2 = st.columns([5, 1])
@@ -64,7 +64,7 @@ if not ai_ready:
     st.caption("💡 Ask about this app or data formats anytime. Upload a file for dataset analysis.")
 
 if submitted and question.strip():
-    history = st.session_state["ai_chat_history"]
+    history = st.session_state["ai_chat_history_v2"]
     try:
         api_key = st.secrets["GEMINI_API_KEY"]
         with st.spinner("✨ AI is analyzing your data..."):
@@ -79,9 +79,9 @@ if submitted and question.strip():
     except Exception as error:
         st.error(f"AI Assistant error: {error}")
 
-if st.session_state["ai_chat_history"]:
+if st.session_state["ai_chat_history_v2"]:
     with st.expander("💬 AI Conversation History", expanded=True):
-        for message in st.session_state["ai_chat_history"][-8:]:
+        for message in st.session_state["ai_chat_history_v2"][-8:]:
             with st.chat_message(
                 "assistant" if message["role"] == "model" else "user"
             ):
