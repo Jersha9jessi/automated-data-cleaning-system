@@ -311,3 +311,69 @@ if uploaded_file is not None:
 
 else:
     st.info("Upload a CSV or XLSX file to get started.")
+
+# ================= PDF VALIDATION MODULE =================
+
+st.divider()
+st.header("📄 PDF Upload & Data Validation")
+st.caption("Extract and validate email addresses, phone numbers, IDs and amounts from text-based PDF files.")
+
+from pdf_validator import validate_pdf
+import io
+
+pdf_file = st.file_uploader(
+    "Upload PDF for Validation",
+    type=["pdf"],
+    key="pdf_validation_upload"
+)
+
+if pdf_file is not None:
+    try:
+        with tempfile.TemporaryDirectory() as pdf_temp:
+            pdf_path = Path(pdf_temp) / pdf_file.name
+            pdf_path.write_bytes(pdf_file.getvalue())
+
+            with st.spinner("Reading and validating PDF..."):
+                extracted_text, pdf_results = validate_pdf(pdf_path)
+
+        st.success("PDF reading completed!")
+
+        total_items = len(pdf_results)
+        valid_items = len(
+            pdf_results[pdf_results["Status"] == "Valid Format"]
+        ) if total_items else 0
+        invalid_items = len(
+            pdf_results[pdf_results["Status"] == "Invalid Format"]
+        ) if total_items else 0
+
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Detected Items", total_items)
+        col2.metric("Valid Formats", valid_items)
+        col3.metric("Invalid Formats", invalid_items)
+
+        st.subheader("📋 PDF Validation Results")
+
+        if not pdf_results.empty:
+            st.dataframe(pdf_results, use_container_width=True)
+
+            excel_buffer = io.BytesIO()
+            with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
+                pdf_results.to_excel(
+                    writer, index=False, sheet_name="PDF Validation"
+                )
+
+            st.download_button(
+                "📥 Download PDF Validation Excel",
+                data=excel_buffer.getvalue(),
+                file_name="pdf_validation_report.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        else:
+            st.warning("No supported email, phone, amount or labelled ID details found.")
+
+        with st.expander("📖 View Extracted PDF Text"):
+            st.text(extracted_text if extracted_text.strip() else
+                    "No selectable text found. This may be a scanned PDF; OCR is not added yet.")
+
+    except Exception as error:
+        st.error(f"PDF validation failed: {error}")
