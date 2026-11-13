@@ -70,7 +70,7 @@ if submitted and question.strip():
         with st.spinner("✨ AI is analyzing your data..."):
             answer = ask_gemini(
                 question,
-                history[-6:],
+                [],
                 st.session_state.get("ai_data_summary", ""),
                 api_key
             )
