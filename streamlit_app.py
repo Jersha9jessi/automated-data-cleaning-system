@@ -16,6 +16,80 @@ st.set_page_config(
 st.title("🧹 Automated Data Cleaning System")
 st.caption("Clean, validate and analyze your datasets automatically.")
 
+
+# ================= TOP AI ASSISTANT =================
+
+st.markdown("""
+<style>
+.ai-hero {
+    background: linear-gradient(120deg, #111827, #312e81, #6d28d9);
+    padding: 25px;
+    border-radius: 18px;
+    color: white;
+    margin: 18px 0;
+    border: 1px solid #6366f1;
+}
+.ai-hero h2 { color: white; margin: 10px 0; }
+.ai-hero p { color: #e0e7ff; margin-bottom: 5px; }
+</style>
+<div class="ai-hero">
+    <div style="font-size:13px; letter-spacing:2px;">
+        ✨ DATAWISE AI · SMART DATA INTELLIGENCE
+    </div>
+    <h2>Meet Your AI Data Assistant</h2>
+    <p>Clean smarter. Discover insights. Ask questions about your data.</p>
+</div>
+""", unsafe_allow_html=True)
+
+ai_ready = "ai_data_summary" in st.session_state
+st.session_state.setdefault("ai_chat_history", [])
+
+with st.form("top_ai_search", clear_on_submit=True):
+    col1, col2 = st.columns([5, 1])
+    with col1:
+        question = st.text_input(
+            "Ask AI",
+            placeholder="✨ Ask anything about your cleaned data...",
+            label_visibility="collapsed",
+            disabled=not ai_ready
+        )
+    with col2:
+        submitted = st.form_submit_button(
+            "Ask AI ✨",
+            use_container_width=True,
+            disabled=not ai_ready
+        )
+
+if not ai_ready:
+    st.caption("📂 Upload and clean a CSV or Excel file to activate your AI Assistant.")
+
+if submitted and question.strip():
+    history = st.session_state["ai_chat_history"]
+    try:
+        api_key = st.secrets["GEMINI_API_KEY"]
+        with st.spinner("✨ AI is analyzing your data..."):
+            answer = ask_gemini(
+                question,
+                history[-6:],
+                st.session_state["ai_data_summary"],
+                api_key
+            )
+        history.append({"role": "user", "content": question})
+        history.append({"role": "model", "content": answer})
+    except Exception as error:
+        st.error(f"AI Assistant error: {error}")
+
+if st.session_state["ai_chat_history"]:
+    with st.expander("💬 AI Conversation History", expanded=True):
+        for message in st.session_state["ai_chat_history"][-8:]:
+            with st.chat_message(
+                "assistant" if message["role"] == "model" else "user"
+            ):
+                st.markdown(message["content"])
+
+st.divider()
+
+
 uploaded_file = st.file_uploader(
     "Upload your CSV or Excel file",
     type=["csv", "xlsx"]
@@ -379,49 +453,3 @@ if pdf_file is not None:
 
     except Exception as error:
         st.error(f"PDF validation failed: {error}")
-
-
-# ================= AI DATA ASSISTANT =================
-
-if "ai_data_summary" in st.session_state:
-    st.divider()
-    st.header("🤖 AI Data Assistant")
-    st.caption("Ask questions about your cleaned dataset using Gemini AI.")
-
-    chat_history = st.session_state.setdefault("ai_chat_history", [])
-
-    for message in chat_history:
-        with st.chat_message("assistant" if message["role"] == "model" else "user"):
-            st.markdown(message["content"])
-
-    question = st.chat_input("Ask something about your cleaned data...")
-
-    if question:
-        st.session_state["ai_chat_history"].append({
-            "role": "user",
-            "content": question
-        })
-
-        with st.chat_message("user"):
-            st.markdown(question)
-
-        try:
-            api_key = st.secrets["GEMINI_API_KEY"]
-
-            with st.chat_message("assistant"):
-                with st.spinner("AI is analyzing your question..."):
-                    answer = ask_gemini(
-                        question,
-                        chat_history[:-1],
-                        st.session_state["ai_data_summary"],
-                        api_key
-                    )
-                st.markdown(answer)
-
-            st.session_state["ai_chat_history"].append({
-                "role": "model",
-                "content": answer
-            })
-
-        except Exception as error:
-            st.error(f"AI Assistant error: {error}")
