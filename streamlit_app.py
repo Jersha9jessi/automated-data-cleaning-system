@@ -95,16 +95,77 @@ st.caption("Clean, validate and analyze your datasets automatically.")
 
 
 
-# DATAWISE_SIDEBAR_NAV
-st.sidebar.markdown("## ✨ DATAWISE AI")
-st.sidebar.caption("Smart Data Intelligence")
-page = st.sidebar.radio(
-    "MAIN MENU",
-    ["Dashboard & AI", "Data Cleaning", "PDF Validation"],
-    key="datawise_navigation"
-)
-st.sidebar.divider()
-st.sidebar.caption("Clean • Validate • Analyze • Report")
+
+# DATAWISE_HOME_NAV
+st.markdown("""
+<style>
+.datawise-nav-card {
+    background: linear-gradient(145deg, #1e1b4b, #312e81);
+    border: 1px solid #6366f1;
+    border-radius: 18px;
+    padding: 22px 16px;
+    min-height: 145px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 18px rgba(79,70,229,0.15);
+}
+.datawise-nav-icon { font-size: 32px; }
+.datawise-nav-title {
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+.datawise-nav-desc {
+    color: #c7d2fe;
+    font-size: 13px;
+    margin-top: 6px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("## ✨ Choose Your Workspace")
+st.caption("Select a section to get started with DATAWISE AI.")
+
+st.session_state.setdefault("datawise_navigation", "Dashboard & AI")
+nav_cols = st.columns(3, gap="medium")
+
+with nav_cols[0]:
+    st.markdown("""
+    <div class="datawise-nav-card">
+        <div class="datawise-nav-icon">🤖</div>
+        <div class="datawise-nav-title">Dashboard & AI</div>
+        <div class="datawise-nav-desc">AI Assistant and workspace overview</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Dashboard & AI", key="nav_dashboard", use_container_width=True):
+        st.session_state["datawise_navigation"] = "Dashboard & AI"
+        st.rerun()
+
+with nav_cols[1]:
+    st.markdown("""
+    <div class="datawise-nav-card">
+        <div class="datawise-nav-icon">🧹</div>
+        <div class="datawise-nav-title">Data Cleaning</div>
+        <div class="datawise-nav-desc">Clean and improve CSV or Excel files</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open Data Cleaning", key="nav_cleaning", use_container_width=True):
+        st.session_state["datawise_navigation"] = "Data Cleaning"
+        st.rerun()
+
+with nav_cols[2]:
+    st.markdown("""
+    <div class="datawise-nav-card">
+        <div class="datawise-nav-icon">📄</div>
+        <div class="datawise-nav-title">PDF Validation</div>
+        <div class="datawise-nav-desc">Extract and validate PDF information</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Open PDF Validation", key="nav_pdf", use_container_width=True):
+        st.session_state["datawise_navigation"] = "PDF Validation"
+        st.rerun()
+
+page = st.session_state["datawise_navigation"]
 
 if page == "Dashboard & AI":
     st.markdown("## 🏠 Dashboard")
