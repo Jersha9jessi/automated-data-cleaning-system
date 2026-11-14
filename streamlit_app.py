@@ -604,7 +604,7 @@ elif page == "PDF Validation":
 
     st.divider()
     st.header("📄 PDF Upload & Data Validation")
-    st.caption("Extract and validate email addresses, phone numbers, IDs and amounts from text-based PDF files.")
+    st.caption("Extract and validate email addresses, phone numbers, IDs and amounts from text-based and scanned PDF files using automatic OCR.")
 
     from pdf_validator import validate_pdf
     import io
@@ -621,7 +621,7 @@ elif page == "PDF Validation":
                 pdf_path = Path(pdf_temp) / pdf_file.name
                 pdf_path.write_bytes(pdf_file.getvalue())
 
-                with st.spinner("Reading and validating PDF..."):
+                with st.spinner("Reading PDF and running OCR when needed..."):
                     extracted_text, pdf_results = validate_pdf(pdf_path)
 
             st.success("PDF reading completed!")
@@ -661,7 +661,7 @@ elif page == "PDF Validation":
 
             with st.expander("📖 View Extracted PDF Text"):
                 st.text(extracted_text if extracted_text.strip() else
-                        "No selectable text found. This may be a scanned PDF; OCR is not added yet.")
+                        "No selectable text found. OCR could not extract text from this scanned PDF.")
 
         except Exception as error:
             st.error(f"PDF validation failed: {error}")
