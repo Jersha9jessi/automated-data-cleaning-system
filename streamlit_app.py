@@ -221,6 +221,94 @@ elif page == "Dashboard & AI":
 
     st.markdown("## 🏠 Dashboard")
     st.caption("Your intelligent data workspace")
+
+    # ================= DATAWISE ANALYTICS DASHBOARD =================
+    dashboard_df = st.session_state.get("dashboard_cleaned_df")
+
+    if dashboard_df is not None and not dashboard_df.empty:
+        st.markdown("### 📊 Dataset Overview")
+        st.caption(
+            f"Latest cleaned dataset: "
+            f"{st.session_state.get('dashboard_file_name', 'Uploaded dataset')}"
+        )
+
+        total_rows, total_columns = dashboard_df.shape
+        missing_total = int(dashboard_df.isna().sum().sum())
+        dashboard_quality = get_data_quality_score(dashboard_df)
+
+        k1, k2, k3, k4 = st.columns(4)
+        k1.metric("📄 Total Rows", f"{total_rows:,}")
+        k2.metric("📚 Total Columns", f"{total_columns:,}")
+        k3.metric("⚠️ Missing Values", f"{missing_total:,}")
+        k4.metric("🏆 Data Quality", f"{dashboard_quality}%")
+
+        st.progress(max(0.0, min(1.0, float(dashboard_quality) / 100)))
+
+        st.markdown("### 📈 Advanced Analytics")
+        left_chart, right_chart = st.columns(2)
+
+        missing_by_column = dashboard_df.isna().sum()
+        with left_chart:
+            st.markdown("**Missing Values by Column**")
+            missing_chart = missing_by_column[missing_by_column > 0]
+            if not missing_chart.empty:
+                st.bar_chart(missing_chart)
+            else:
+                st.success("Excellent! No missing values found.")
+
+        numeric_columns = dashboard_df.select_dtypes(include="number").columns.tolist()
+        with right_chart:
+            st.markdown("**Numeric Column Analysis**")
+            if numeric_columns:
+                selected_numeric = st.selectbox(
+                    "Choose a numeric column",
+                    numeric_columns,
+                    key="dashboard_numeric_column"
+                )
+                numeric_data = dashboard_df[selected_numeric].dropna()
+                if not numeric_data.empty:
+                    st.line_chart(numeric_data.reset_index(drop=True))
+                    st.caption(
+                        f"Average: {numeric_data.mean():,.2f}  |  "
+                        f"Minimum: {numeric_data.min():,.2f}  |  "
+                        f"Maximum: {numeric_data.max():,.2f}"
+                    )
+                else:
+                    st.info("This column has no numeric values to chart.")
+            else:
+                st.info("No numeric columns available in this dataset.")
+
+        st.markdown("### 🧩 Column Insights")
+        categorical_columns = dashboard_df.select_dtypes(
+            include=["object", "category", "bool"]
+        ).columns.tolist()
+
+        if categorical_columns:
+            selected_category = st.selectbox(
+                "Choose a category column",
+                categorical_columns,
+                key="dashboard_category_column"
+            )
+            category_counts = (
+                dashboard_df[selected_category]
+                .fillna("Missing")
+                .astype(str)
+                .value_counts()
+                .head(10)
+            )
+            st.bar_chart(category_counts)
+            st.caption("Showing the top 10 values in this column.")
+        else:
+            st.info("No categorical columns available for category analysis.")
+
+    else:
+        st.info(
+            "👋 Welcome to DATAWISE AI! Upload and clean a CSV or Excel file "
+            "in Data Cleaning to unlock your live dashboard, KPIs and analytics."
+        )
+
+    st.divider()
+
     # ================= TOP AI ASSISTANT =================
 
     st.markdown("""
@@ -486,6 +574,10 @@ elif page == "Data Cleaning":
                             output_excel,
                             sheet_name="Cleaned Data"
                         )
+
+                        st.session_state["dashboard_cleaned_df"] = cleaned_df.copy()
+
+                        st.session_state["dashboard_file_name"] = uploaded_file.name
 
                         with open(output_json, encoding="utf-8") as file:
                             report = json.load(file)
