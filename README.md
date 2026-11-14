@@ -1,71 +1,168 @@
+# ✨ DATAWISE AI — Smart Data Intelligence
 
-# Automated Excel & CSV Data Cleaning System
+<p align="center">
+  <strong>Clean Smarter. Validate Better. Discover Insights.</strong>
+</p>
 
-A Python-based data cleaning and automation tool that processes CSV and Excel files, removes duplicate records, handles missing values, validates email addresses, and generates professional reports.
+<p align="center">
+  An AI-powered data cleaning, validation and intelligence platform built with Python and Streamlit.
+</p>
 
-## Features
+<p align="center">
+  <a href="https://automated-data-cleaning-system-cpk29qedltytuajcudcbtz.streamlit.app/">
+    🚀 Live Demo
+  </a>
+  |
+  <a href="https://github.com/Jersha9jessi/automated-data-cleaning-system">
+    💻 GitHub Repository
+  </a>
+</p>
 
-- CSV and Excel file processing
-- Automatic column name cleaning
-- Duplicate record removal
-- Missing value handling
-- Email validation
-- Date format standardization
-- Before and after data quality comparison
-- Excel report generation with multiple sheets
-- SQLite database storage
-- JSON summary report
-- Error handling
+---
 
-## Technologies Used
+## 🚀 About the Project
 
-- Python
-- Pandas
-- OpenPyXL
-- SQLite
-- Regular Expressions
-- JSON
+DATAWISE AI is a smart data intelligence platform designed to simplify data preparation and analysis.
 
-## Project Output
+It helps users clean datasets, handle missing values, detect duplicates, validate data, generate reports and interact with an AI assistant.
 
-The application generates:
+The platform combines automated data processing with AI-powered assistance in one application.
 
-1. Cleaned Excel Report
-2. SQLite Database
-3. JSON Data Quality Report
+## ✨ Key Features
 
-## Installation
+### 📊 Data Cleaning
+- Upload CSV and Excel datasets.
+- Automatically clean column names.
+- Handle missing values using multiple strategies.
+- Detect and remove duplicate records.
+- Rename, delete, split and reorder columns.
+- Compare original and cleaned datasets.
 
-```bash
-pip install pandas openpyxl
-```
+### 🛡️ Data Validation
+- Email validation.
+- Phone number validation.
+- Date and time validation.
+- Numeric column validation.
+- Identify invalid and missing values.
+- Calculate data quality scores.
 
-## Run the Project
+### 🤖 AI Data Assistant
+- Gemini-powered AI assistant.
+- Ask questions about the application.
+- Understand dataset summaries.
+- Get help with data cleaning and validation.
+- Receive guidance about supported file formats.
 
-```bash
-python app.py
-```
+### 📄 PDF Validation
+- Upload text-based PDF documents.
+- Extract available PDF text.
+- Identify emails, phone numbers, amounts and reference IDs.
+- Generate structured validation results.
 
-Enter your CSV or XLSX file path when prompted.
+Note: Scanned-image PDF OCR is not currently included.
 
-Example:
+### 📥 Reports & Downloads
+- Download cleaned CSV files.
+- Download Excel files.
+- Export JSON results.
+- Generate professional PDF reports.
+- Review before-and-after data comparisons.
+
+## 🧰 Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Core programming |
+| Streamlit | Web application |
+| Pandas | Data processing |
+| OpenPyXL | Excel processing |
+| Gemini API | AI assistant |
+| PyPDF | PDF text extraction |
+| ReportLab | PDF report generation |
+| Git & GitHub | Version control |
+
+## 🏗️ Project Structure
 
 ```text
-sample.csv
+automated-data-cleaning-system/
+│
+├── streamlit_app.py       # Main Streamlit application
+├── app.py                 # Data cleaning functions
+├── ai_assistant.py        # Gemini AI integration
+├── app_knowledge.py       # Application knowledge base
+├── pdf_validator.py       # PDF validation
+├── test_app.py            # Automated tests
+├── requirements.txt       # Python dependencies
+├── sample.csv             # Sample dataset
+└── README.md               # Project documentation
 ```
 
-## Sample Test Results
+## ⚙️ Installation
 
-- Original Rows: 6
-- Cleaned Rows: 5
-- Duplicate Rows Removed: 1
-- Invalid Emails Detected: 1
-- Excel Sheets Generated: 5
+Clone the repository:
 
-## Author
+```bash
+git clone https://github.com/Jersha9jessi/automated-data-cleaning-system.git
+cd automated-data-cleaning-system
+```
 
-Python Developer | Data Cleaning | Automation | ETL
+Install dependencies:
 
-## License
+```bash
+pip install -r requirements.txt
+```
+
+Configure your Gemini API key securely using Streamlit secrets.
+
+Create `.streamlit/secrets.toml`:
+
+```toml
+GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"
+```
+
+Never upload your API key or secrets file to GitHub.
+
+Run the application:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+## 🧪 Testing
+
+Run the automated tests:
+
+```bash
+python -m unittest -v
+```
+
+## 🌐 Live Application
+
+Try DATAWISE AI:
+
+https://automated-data-cleaning-system-cpk29qedltytuajcudcbtz.streamlit.app/
+
+## 🔒 Data & Privacy
+
+The AI assistant uses dataset summaries for supported dataset-related questions rather than sending the entire dataset.
+
+Do not upload confidential or sensitive business data without appropriate authorization.
+
+## 🛣️ Future Improvements
+
+- OCR support for scanned PDF documents.
+- Advanced data visualizations.
+- More data validation rules.
+- Expanded AI-powered analysis.
+- Enhanced dashboard and user experience.
+- Additional file format support.
+
+## 👨‍💻 Author
+
+**DATAWISE AI Project**
+
+Python | Data Cleaning | Automation | Data Validation | Generative AI
+
+## 📜 License
 
 MIT License
