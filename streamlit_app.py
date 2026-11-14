@@ -107,36 +107,45 @@ st.markdown("""
     max-width: 100% !important;
     padding-left: 12px !important;
     padding-right: 12px !important;
+    box-sizing: border-box !important;
     overflow-x: hidden !important;
 }
 h1 { font-size: clamp(22px, 5vw, 36px) !important; }
-.stApp:has(.st-key-nav_dashboard) [data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    flex-wrap: nowrap !important;
+
+/* Keep homepage cards in a true 2x2 grid */
+.stApp:has(.st-key-nav_dashboard) [data-testid="stHorizontalBlock"]:has(.st-key-nav_dashboard),
+.stApp:has(.st-key-nav_pdf) [data-testid="stHorizontalBlock"]:has(.st-key-nav_pdf) {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 12px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
 }
-.stApp:has(.st-key-nav_dashboard) [data-testid="column"] {
+.stApp:has(.st-key-nav_dashboard) [data-testid="stHorizontalBlock"]:has(.st-key-nav_dashboard) [data-testid="column"],
+.stApp:has(.st-key-nav_pdf) [data-testid="stHorizontalBlock"]:has(.st-key-nav_pdf) [data-testid="column"] {
+    width: auto !important;
     min-width: 0 !important;
-    width: calc(50% - 6px) !important;
-    max-width: calc(50% - 6px) !important;
-    flex: 0 0 calc(50% - 6px) !important;
+    max-width: none !important;
+    flex: none !important;
+    box-sizing: border-box !important;
 }
 .st-key-nav_dashboard button,
 .st-key-nav_cleaning button,
 .st-key-nav_pdf button,
 .st-key-nav_explore button {
     width: 100% !important;
-    height: 145px !important;
-    min-height: 145px !important;
-    padding: 12px !important;
-    border-radius: 17px !important;
+    height: 150px !important;
+    min-height: 150px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
     white-space: pre-wrap !important;
     text-align: left !important;
     display: flex !important;
+    flex-direction: column !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
     border: 1px solid rgba(255,255,255,.2) !important;
 }
 .st-key-nav_dashboard button { background: #292044 !important; }
@@ -149,17 +158,18 @@ h1 { font-size: clamp(22px, 5vw, 36px) !important; }
 .st-key-nav_pdf button p,
 .st-key-nav_explore button p {
     color: white !important;
-    font-size: clamp(12px, 2.5vw, 16px) !important;
-    line-height: 1.45 !important;
+    font-size: clamp(12px, 3.4vw, 16px) !important;
+    line-height: 1.5 !important;
     overflow-wrap: anywhere !important;
+    text-align: left !important;
 }
 @media (min-width: 900px) {
     .st-key-nav_dashboard button,
     .st-key-nav_cleaning button,
     .st-key-nav_pdf button,
     .st-key-nav_explore button {
-        height: 180px !important;
-        min-height: 180px !important;
+        height: 175px !important;
+        min-height: 175px !important;
         padding: 20px !important;
     }
 }
@@ -181,26 +191,26 @@ if page == "Home":
 
     col1, col2 = st.columns(2, gap="small")
     with col1:
-        if st.button("🤖  Dashboard & AI\n\nAI Assistant and overview",
+        if st.button("🤖  **Dashboard & AI**  \nAI Assistant and overview",
                      key="nav_dashboard", use_container_width=True):
             st.session_state["datawise_navigation"] = "Dashboard & AI"
             st.rerun()
 
     with col2:
-        if st.button("🧹  Data Cleaning\n\nClean CSV and Excel files",
+        if st.button("🧹  **Data Cleaning**  \nClean CSV and Excel files",
                      key="nav_cleaning", use_container_width=True):
             st.session_state["datawise_navigation"] = "Data Cleaning"
             st.rerun()
 
     col3, col4 = st.columns(2, gap="small")
     with col3:
-        if st.button("📄  PDF Validation\n\nExtract and validate PDF data",
+        if st.button("📄  **PDF Validation**  \nExtract and validate PDF data",
                      key="nav_pdf", use_container_width=True):
             st.session_state["datawise_navigation"] = "PDF Validation"
             st.rerun()
 
     with col4:
-        if st.button("➡️  Explore\n\nDiscover DATAWISE AI features",
+        if st.button("➡️  **Explore**  \nDiscover DATAWISE AI features",
                      key="nav_explore", use_container_width=True):
             st.session_state["datawise_navigation"] = "Explore"
             st.rerun()
