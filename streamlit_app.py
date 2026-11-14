@@ -96,78 +96,100 @@ st.caption("Clean, validate and analyze your datasets automatically.")
 
 
 
+
 # DATAWISE_HOME_NAV
 st.markdown("""
 <style>
 .datawise-nav-card {
-    background: linear-gradient(145deg, #1e1b4b, #312e81);
-    border: 1px solid #6366f1;
     border-radius: 18px;
     padding: 22px 16px;
-    min-height: 145px;
+    min-height: 150px;
     margin-bottom: 10px;
-    box-shadow: 0 5px 18px rgba(79,70,229,0.15);
+    border: 1px solid rgba(255,255,255,0.15);
 }
-.datawise-nav-icon { font-size: 32px; }
-.datawise-nav-title {
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    margin-top: 10px;
+.datawise-nav-card h3 {
+    color: #ffffff !important;
+    font-size: 19px;
+    margin: 12px 0 8px 0;
 }
-.datawise-nav-desc {
-    color: #c7d2fe;
-    font-size: 13px;
-    margin-top: 6px;
+.datawise-nav-card p {
+    color: #e5e7eb !important;
+    font-size: 14px;
+    margin: 0;
 }
+.datawise-nav-icon { font-size: 34px; }
+.nav-purple { background: #292044; }
+.nav-green { background: #173d38; }
+.nav-brown { background: #3d2c18; }
+.nav-blue { background: #25314c; }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("## ✨ Choose Your Workspace")
-st.caption("Select a section to get started with DATAWISE AI.")
-
-st.session_state.setdefault("datawise_navigation", "Dashboard & AI")
-nav_cols = st.columns(3, gap="medium")
-
-with nav_cols[0]:
-    st.markdown("""
-    <div class="datawise-nav-card">
-        <div class="datawise-nav-icon">🤖</div>
-        <div class="datawise-nav-title">Dashboard & AI</div>
-        <div class="datawise-nav-desc">AI Assistant and workspace overview</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("Open Dashboard & AI", key="nav_dashboard", use_container_width=True):
-        st.session_state["datawise_navigation"] = "Dashboard & AI"
-        st.rerun()
-
-with nav_cols[1]:
-    st.markdown("""
-    <div class="datawise-nav-card">
-        <div class="datawise-nav-icon">🧹</div>
-        <div class="datawise-nav-title">Data Cleaning</div>
-        <div class="datawise-nav-desc">Clean and improve CSV or Excel files</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("Open Data Cleaning", key="nav_cleaning", use_container_width=True):
-        st.session_state["datawise_navigation"] = "Data Cleaning"
-        st.rerun()
-
-with nav_cols[2]:
-    st.markdown("""
-    <div class="datawise-nav-card">
-        <div class="datawise-nav-icon">📄</div>
-        <div class="datawise-nav-title">PDF Validation</div>
-        <div class="datawise-nav-desc">Extract and validate PDF information</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("Open PDF Validation", key="nav_pdf", use_container_width=True):
-        st.session_state["datawise_navigation"] = "PDF Validation"
-        st.rerun()
-
+st.session_state.setdefault("datawise_navigation", "Home")
 page = st.session_state["datawise_navigation"]
 
-if page == "Dashboard & AI":
+if page != "Home":
+    if st.button("← Home", key="back_to_home"):
+        st.session_state["datawise_navigation"] = "Home"
+        st.rerun()
+
+if page == "Home":
+    st.markdown("## ✨ DATAWISE AI")
+    st.markdown("### Smart Data Intelligence")
+    st.caption("Choose what you want to do")
+
+    col1, col2 = st.columns(2, gap="medium")
+    with col1:
+        st.markdown("""
+        <div class="datawise-nav-card nav-purple">
+            <div class="datawise-nav-icon">🤖</div>
+            <h3>Dashboard & AI</h3>
+            <p>AI Assistant and overview</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Open Dashboard & AI", key="nav_dashboard", use_container_width=True):
+            st.session_state["datawise_navigation"] = "Dashboard & AI"
+            st.rerun()
+
+    with col2:
+        st.markdown("""
+        <div class="datawise-nav-card nav-green">
+            <div class="datawise-nav-icon">🧹</div>
+            <h3>Data Cleaning</h3>
+            <p>Clean CSV and Excel files</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Open Data Cleaning", key="nav_cleaning", use_container_width=True):
+            st.session_state["datawise_navigation"] = "Data Cleaning"
+            st.rerun()
+
+    col3, col4 = st.columns(2, gap="medium")
+    with col3:
+        st.markdown("""
+        <div class="datawise-nav-card nav-brown">
+            <div class="datawise-nav-icon">📄</div>
+            <h3>PDF Validation</h3>
+            <p>Extract and validate PDF data</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Open PDF Validation", key="nav_pdf", use_container_width=True):
+            st.session_state["datawise_navigation"] = "PDF Validation"
+            st.rerun()
+
+    with col4:
+        st.markdown("""
+        <div class="datawise-nav-card nav-blue">
+            <div class="datawise-nav-icon">➡️</div>
+            <h3>Explore</h3>
+            <p>Discover DATAWISE AI features</p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Explore Features", key="nav_explore", use_container_width=True):
+            st.session_state["datawise_navigation"] = "Explore"
+            st.rerun()
+
+elif page == "Dashboard & AI":
+
     st.markdown("## 🏠 Dashboard")
     st.caption("Your intelligent data workspace")
     # ================= TOP AI ASSISTANT =================
@@ -614,3 +636,16 @@ elif page == "PDF Validation":
 
         except Exception as error:
             st.error(f"PDF validation failed: {error}")
+
+
+elif page == "Explore":
+    st.markdown("## ✨ Explore DATAWISE AI")
+    st.caption("Discover the tools available in your data workspace.")
+    st.markdown("""
+    - 🤖 **AI Data Assistant:** Ask questions about your data and this app.
+    - 🧹 **Smart Data Cleaning:** Handle missing values and duplicates.
+    - ✅ **Data Validation:** Check emails, dates and other data fields.
+    - 📊 **Data Quality:** Review quality scores and cleaning results.
+    - 📄 **PDF Validation:** Extract and validate information from text-based PDFs.
+    - 📥 **Reports:** Download supported reports and cleaned files.
+    """)
