@@ -650,6 +650,70 @@ elif page == "PDF Validation":
                         writer, index=False, sheet_name="PDF Validation"
                     )
 
+                    from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
+                    from openpyxl.utils import get_column_letter
+
+                    ws = writer.sheets["PDF Validation"]
+                    ws.freeze_panes = "A2"
+                    ws.auto_filter.ref = ws.dimensions
+                    ws.sheet_view.showGridLines = False
+
+                    header_fill = PatternFill(
+                        fill_type="solid", fgColor="172554"
+                    )
+                    header_font = Font(
+                        bold=True, color="FFFFFF", size=11
+                    )
+                    thin_border = Border(
+                        bottom=Side(style="thin", color="D1D5DB")
+                    )
+
+                    for cell in ws[1]:
+                        cell.fill = header_fill
+                        cell.font = header_font
+                        cell.alignment = Alignment(
+                            horizontal="center", vertical="center"
+                        )
+                        cell.border = thin_border
+
+                    ws.row_dimensions[1].height = 28
+
+                    for column_cells in ws.columns:
+                        column_letter = get_column_letter(
+                            column_cells[0].column
+                        )
+                        max_length = max(
+                            len(str(cell.value or ""))
+                            for cell in column_cells
+                        )
+                        ws.column_dimensions[column_letter].width = min(
+                            max(max_length + 4, 14), 42
+                        )
+
+                    for row in ws.iter_rows(min_row=2):
+                        for cell in row:
+                            cell.alignment = Alignment(
+                                vertical="center", wrap_text=True
+                            )
+                            cell.border = thin_border
+
+                            if cell.column == 4:
+                                if cell.value == "Valid Format":
+                                    cell.font = Font(
+                                        color="15803D", bold=True
+                                    )
+                                elif cell.value == "Invalid Format":
+                                    cell.font = Font(
+                                        color="DC2626", bold=True
+                                    )
+                                else:
+                                    cell.font = Font(color="92400E")
+
+                    ws.sheet_properties.pageSetUpPr.fitToPage = True
+                    ws.page_setup.fitToWidth = 1
+                    ws.page_setup.fitToHeight = 0
+                    ws.page_setup.orientation = "landscape"
+
                 st.download_button(
                     "📥 Download PDF Validation Excel",
                     data=excel_buffer.getvalue(),
