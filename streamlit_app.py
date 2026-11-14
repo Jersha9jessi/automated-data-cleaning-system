@@ -770,26 +770,56 @@ elif page == "PDF Validation":
 
                     ws.row_dimensions[1].height = 28
 
+                    from openpyxl.utils import get_column_letter
+
+                    # Set readable widths based on actual column names.
+                    headers = {
+                        str(cell.value).strip().lower(): cell.column
+                        for cell in ws[1] if cell.value is not None
+                    }
+                    status_col = headers.get("status")
+
+                    fixed_widths = {
+                        "type": 20,
+                        "value": 36,
+                        "status": 48,
+                    }
+
                     for column_cells in ws.columns:
-                        column_letter = get_column_letter(
-                            column_cells[0].column
-                        )
-                        max_length = max(
+                        letter = get_column_letter(column_cells[0].column)
+                        header = str(column_cells[0].value or "").strip().lower()
+                        content_length = max(
                             len(str(cell.value or ""))
                             for cell in column_cells
                         )
-                        ws.column_dimensions[column_letter].width = min(
-                            max(max_length + 4, 14), 42
+                        width = fixed_widths.get(
+                            header, min(max(content_length + 4, 16), 36)
                         )
+                        ws.column_dimensions[letter].width = width
+
+                    ws.sheet_view.zoomScale = 85
 
                     for row in ws.iter_rows(min_row=2):
+                        max_lines = 1
                         for cell in row:
                             cell.alignment = Alignment(
-                                vertical="center", wrap_text=True
+                                horizontal="left",
+                                vertical="center",
+                                wrap_text=True
                             )
                             cell.border = thin_border
 
-                            if cell.column == 4:
+                            width = ws.column_dimensions[
+                                get_column_letter(cell.column)
+                            ].width
+                            text_length = len(str(cell.value or ""))
+                            lines = max(
+                                1, (text_length + max(int(width) - 3, 1) - 1)
+                                // max(int(width) - 2, 1)
+                            )
+                            max_lines = max(max_lines, lines)
+
+                            if cell.column == status_col:
                                 if cell.value == "Valid Format":
                                     cell.font = Font(
                                         color="15803D", bold=True
@@ -800,6 +830,10 @@ elif page == "PDF Validation":
                                     )
                                 else:
                                     cell.font = Font(color="92400E")
+
+                        ws.row_dimensions[row[0].row].height = min(
+                            90, max(30, max_lines * 18)
+                        )
 
                     ws.sheet_properties.pageSetUpPr.fitToPage = True
                     ws.page_setup.fitToWidth = 1
