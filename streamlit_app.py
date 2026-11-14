@@ -97,31 +97,65 @@ st.caption("Clean, validate and analyze your datasets automatically.")
 
 
 
+
 # DATAWISE_HOME_NAV
 st.markdown("""
 <style>
-.datawise-nav-card {
-    border-radius: 18px;
-    padding: 22px 16px;
-    min-height: 150px;
-    margin-bottom: 10px;
-    border: 1px solid rgba(255,255,255,0.15);
+h1 { font-size: clamp(1.7rem, 5vw, 2.4rem) !important; }
+
+.stApp:has(.st-key-nav_dashboard) [data-testid="stHorizontalBlock"] {
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
 }
-.datawise-nav-card h3 {
-    color: #ffffff !important;
-    font-size: 19px;
-    margin: 12px 0 8px 0;
+.stApp:has(.st-key-nav_dashboard) [data-testid="column"] {
+    min-width: 0 !important;
+    width: 50% !important;
+    flex: 1 1 50% !important;
 }
-.datawise-nav-card p {
-    color: #e5e7eb !important;
-    font-size: 14px;
-    margin: 0;
+.st-key-nav_dashboard button,
+.st-key-nav_cleaning button,
+.st-key-nav_pdf button,
+.st-key-nav_explore button {
+    width: 100%;
+    min-height: 175px !important;
+    height: 175px !important;
+    border-radius: 20px !important;
+    padding: 18px 12px !important;
+    text-align: left !important;
+    white-space: pre-wrap !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    border: 1px solid rgba(255,255,255,.2) !important;
+    box-shadow: 0 5px 18px rgba(0,0,0,.18);
 }
-.datawise-nav-icon { font-size: 34px; }
-.nav-purple { background: #292044; }
-.nav-green { background: #173d38; }
-.nav-brown { background: #3d2c18; }
-.nav-blue { background: #25314c; }
+.st-key-nav_dashboard button {
+    background: #292044 !important;
+}
+.st-key-nav_cleaning button {
+    background: #173d38 !important;
+}
+.st-key-nav_pdf button {
+    background: #3d2c18 !important;
+}
+.st-key-nav_explore button {
+    background: #25314c !important;
+}
+.st-key-nav_dashboard button p,
+.st-key-nav_cleaning button p,
+.st-key-nav_pdf button p,
+.st-key-nav_explore button p {
+    color: white !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+}
+.st-key-nav_dashboard button:hover,
+.st-key-nav_cleaning button:hover,
+.st-key-nav_pdf button:hover,
+.st-key-nav_explore button:hover {
+    border: 2px solid #a5b4fc !important;
+    filter: brightness(1.15);
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -140,55 +174,32 @@ if page == "Home":
 
     col1, col2 = st.columns(2, gap="medium")
     with col1:
-        st.markdown("""
-        <div class="datawise-nav-card nav-purple">
-            <div class="datawise-nav-icon">🤖</div>
-            <h3>Dashboard & AI</h3>
-            <p>AI Assistant and overview</p>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Open Dashboard & AI", key="nav_dashboard", use_container_width=True):
+        if st.button("🤖\\n\\n**Dashboard & AI**\\n\\nAI Assistant and overview",
+                     key="nav_dashboard", use_container_width=True):
             st.session_state["datawise_navigation"] = "Dashboard & AI"
             st.rerun()
 
     with col2:
-        st.markdown("""
-        <div class="datawise-nav-card nav-green">
-            <div class="datawise-nav-icon">🧹</div>
-            <h3>Data Cleaning</h3>
-            <p>Clean CSV and Excel files</p>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Open Data Cleaning", key="nav_cleaning", use_container_width=True):
+        if st.button("🧹\\n\\n**Data Cleaning**\\n\\nClean CSV and Excel files",
+                     key="nav_cleaning", use_container_width=True):
             st.session_state["datawise_navigation"] = "Data Cleaning"
             st.rerun()
 
     col3, col4 = st.columns(2, gap="medium")
     with col3:
-        st.markdown("""
-        <div class="datawise-nav-card nav-brown">
-            <div class="datawise-nav-icon">📄</div>
-            <h3>PDF Validation</h3>
-            <p>Extract and validate PDF data</p>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Open PDF Validation", key="nav_pdf", use_container_width=True):
+        if st.button("📄\\n\\n**PDF Validation**\\n\\nExtract and validate PDF data",
+                     key="nav_pdf", use_container_width=True):
             st.session_state["datawise_navigation"] = "PDF Validation"
             st.rerun()
 
     with col4:
-        st.markdown("""
-        <div class="datawise-nav-card nav-blue">
-            <div class="datawise-nav-icon">➡️</div>
-            <h3>Explore</h3>
-            <p>Discover DATAWISE AI features</p>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Explore Features", key="nav_explore", use_container_width=True):
+        if st.button("➡️\\n\\n**Explore**\\n\\nDiscover DATAWISE AI features",
+                     key="nav_explore", use_container_width=True):
             st.session_state["datawise_navigation"] = "Explore"
             st.rerun()
 
 elif page == "Dashboard & AI":
+
 
     st.markdown("## 🏠 Dashboard")
     st.caption("Your intelligent data workspace")
