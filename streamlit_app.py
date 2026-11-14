@@ -98,63 +98,70 @@ st.caption("Clean, validate and analyze your datasets automatically.")
 
 
 
+
 # DATAWISE_HOME_NAV
 st.markdown("""
 <style>
-h1 { font-size: clamp(1.7rem, 5vw, 2.4rem) !important; }
-
+.block-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    overflow-x: hidden !important;
+}
+h1 { font-size: clamp(22px, 5vw, 36px) !important; }
 .stApp:has(.st-key-nav_dashboard) [data-testid="stHorizontalBlock"] {
+    display: flex !important;
     flex-wrap: nowrap !important;
     gap: 12px !important;
+    width: 100% !important;
 }
 .stApp:has(.st-key-nav_dashboard) [data-testid="column"] {
     min-width: 0 !important;
-    width: 50% !important;
-    flex: 1 1 50% !important;
+    width: calc(50% - 6px) !important;
+    max-width: calc(50% - 6px) !important;
+    flex: 0 0 calc(50% - 6px) !important;
 }
 .st-key-nav_dashboard button,
 .st-key-nav_cleaning button,
 .st-key-nav_pdf button,
 .st-key-nav_explore button {
-    width: 100%;
-    min-height: 175px !important;
-    height: 175px !important;
-    border-radius: 20px !important;
-    padding: 18px 12px !important;
-    text-align: left !important;
+    width: 100% !important;
+    height: 145px !important;
+    min-height: 145px !important;
+    padding: 12px !important;
+    border-radius: 17px !important;
     white-space: pre-wrap !important;
+    text-align: left !important;
     display: flex !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
+    overflow: hidden !important;
     border: 1px solid rgba(255,255,255,.2) !important;
-    box-shadow: 0 5px 18px rgba(0,0,0,.18);
 }
-.st-key-nav_dashboard button {
-    background: #292044 !important;
-}
-.st-key-nav_cleaning button {
-    background: #173d38 !important;
-}
-.st-key-nav_pdf button {
-    background: #3d2c18 !important;
-}
-.st-key-nav_explore button {
-    background: #25314c !important;
-}
+.st-key-nav_dashboard button { background: #292044 !important; }
+.st-key-nav_cleaning button { background: #173d38 !important; }
+.st-key-nav_pdf button { background: #3d2c18 !important; }
+.st-key-nav_explore button { background: #25314c !important; }
+
 .st-key-nav_dashboard button p,
 .st-key-nav_cleaning button p,
 .st-key-nav_pdf button p,
 .st-key-nav_explore button p {
     color: white !important;
-    font-size: 16px !important;
-    line-height: 1.6 !important;
+    font-size: clamp(12px, 2.5vw, 16px) !important;
+    line-height: 1.45 !important;
+    overflow-wrap: anywhere !important;
 }
-.st-key-nav_dashboard button:hover,
-.st-key-nav_cleaning button:hover,
-.st-key-nav_pdf button:hover,
-.st-key-nav_explore button:hover {
-    border: 2px solid #a5b4fc !important;
-    filter: brightness(1.15);
+@media (min-width: 900px) {
+    .st-key-nav_dashboard button,
+    .st-key-nav_cleaning button,
+    .st-key-nav_pdf button,
+    .st-key-nav_explore button {
+        height: 180px !important;
+        min-height: 180px !important;
+        padding: 20px !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -172,33 +179,34 @@ if page == "Home":
     st.markdown("### Smart Data Intelligence")
     st.caption("Choose what you want to do")
 
-    col1, col2 = st.columns(2, gap="medium")
+    col1, col2 = st.columns(2, gap="small")
     with col1:
-        if st.button("🤖\\n\\n**Dashboard & AI**\\n\\nAI Assistant and overview",
+        if st.button("🤖  Dashboard & AI\n\nAI Assistant and overview",
                      key="nav_dashboard", use_container_width=True):
             st.session_state["datawise_navigation"] = "Dashboard & AI"
             st.rerun()
 
     with col2:
-        if st.button("🧹\\n\\n**Data Cleaning**\\n\\nClean CSV and Excel files",
+        if st.button("🧹  Data Cleaning\n\nClean CSV and Excel files",
                      key="nav_cleaning", use_container_width=True):
             st.session_state["datawise_navigation"] = "Data Cleaning"
             st.rerun()
 
-    col3, col4 = st.columns(2, gap="medium")
+    col3, col4 = st.columns(2, gap="small")
     with col3:
-        if st.button("📄\\n\\n**PDF Validation**\\n\\nExtract and validate PDF data",
+        if st.button("📄  PDF Validation\n\nExtract and validate PDF data",
                      key="nav_pdf", use_container_width=True):
             st.session_state["datawise_navigation"] = "PDF Validation"
             st.rerun()
 
     with col4:
-        if st.button("➡️\\n\\n**Explore**\\n\\nDiscover DATAWISE AI features",
+        if st.button("➡️  Explore\n\nDiscover DATAWISE AI features",
                      key="nav_explore", use_container_width=True):
             st.session_state["datawise_navigation"] = "Explore"
             st.rerun()
 
 elif page == "Dashboard & AI":
+
 
 
     st.markdown("## 🏠 Dashboard")
